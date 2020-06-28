@@ -14,6 +14,8 @@ const KEY_S = 83 // s
 const KEY_UP = 38 // ArrowUp
 const KEY_DOWN = 40 // ArrowDown
 
+const KEY_ESC = 'Escape'
+
 // colors
 const color = {
   bg: [0,0,0],
@@ -190,6 +192,8 @@ let padr = new PadRight()
 let padl = new PadLeft()
 let ball = new Ball()
 
+let paused = false
+
 function setup () {
   frameRate(FRAMERATE)
   canvas = createCanvas(innerWidth, innerHeight)
@@ -205,10 +209,11 @@ function draw () {
   )
   
   // update
-  ball.update()
-  padr.update()
-  padl.update()
-  
+  if (!paused) {
+    ball.update()
+    padr.update()
+    padl.update()  
+  }
   // reset screen
   clear()
   background(...color.bg)
@@ -218,4 +223,10 @@ function draw () {
   rect(...padr.rect)
   rect(...padl.rect)
   ellipse(...ball.ellipse)
+}
+
+function keyPressed () {
+  if (key == KEY_ESC) {
+    paused = !paused
+  }
 }
