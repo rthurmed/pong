@@ -125,6 +125,15 @@ class Ball {
   get isGoingUp () { return this.ydir < 0 }
   get isGoingDown () { return this.ydir > 0 }
 
+  canBounce (pad) {
+    return pad.y < (this.y + this.r) && pad.botY > (this.y - this.r)
+  }
+
+  reset () {
+    this.x = Ball.initialX
+    this.y = Ball.initialY
+  }
+
   move (moveX, moveY) {
     const newX = this.x + moveX
     const newY = this.y + moveY
@@ -155,10 +164,15 @@ class Ball {
       newX < limitRight
     ) {
       this.x = newX
-    } else {
+    } else if (
+      (this.isGoingLeft && this.canBounce(padl)) ||
+      (this.isGoingRight && this.canBounce(padr))
+    ) {
       // Teleport the ball to the limit
       this.x = this.isGoingLeft ? limitLeft : limitRight
       this.xdir = this.xdir * -1
+    } else {
+      this.reset()   
     }
   }
 
