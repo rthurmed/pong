@@ -1,5 +1,6 @@
 const MARGIN = 10
 const FRAMERATE = 60
+const TEXTSIZE = 20
 
 // screen
 const { innerWidth, innerHeight } = window
@@ -195,8 +196,12 @@ let ball = new Ball()
 let paused = false
 
 function setup () {
-  frameRate(FRAMERATE)
   canvas = createCanvas(innerWidth, innerHeight)
+
+  frameRate(FRAMERATE)
+
+  textSize(TEXTSIZE)
+  strokeWeight(1)
 }
 
 function draw () {
@@ -223,6 +228,11 @@ function draw () {
   rect(...padr.rect)
   rect(...padl.rect)
   ellipse(...ball.ellipse)
+
+  if (paused) {
+    textAlign(CENTER, CENTER)
+    text('Press esc to continue', innerWidth/2, innerHeight/2)
+  }
 }
 
 function keyPressed () {
