@@ -100,11 +100,10 @@ class Ball {
   static initialX = innerWidth/2 - Ball.diameter/2
   static initialY = innerHeight/2 - Ball.diameter/2
 
-  constructor (x = Ball.initialX, y = Ball.initialY, xdir = 1, ydir = 1) {
-    this.x = x
-    this.y = y
-    this.xdir = xdir
-    this.ydir = ydir
+  static randomDir = () => Math.round(Math.random()) || -1
+
+  constructor () {
+    this.reset()
   }
 
   // Diameter
@@ -135,6 +134,8 @@ class Ball {
   reset () {
     this.x = Ball.initialX
     this.y = Ball.initialY
+    this.xdir = Ball.randomDir()
+    this.ydir = Ball.randomDir()
   }
 
   move (moveX, moveY) {
