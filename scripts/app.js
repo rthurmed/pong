@@ -72,6 +72,10 @@ class Pad {
     if (keyIsDown(this.keyMoveDown)) { this.moveDown() }
     if (keyIsDown(this.keyMoveUp)) { this.moveUp() }
   }
+
+  draw () {
+    rect(...this.rect)
+  }
 }
 
 class PadLeft extends Pad {
@@ -190,6 +194,10 @@ class Ball {
       this.ydir * Ball.speed
     )
   }
+
+  draw () {
+    ellipse(...this.ellipse)
+  }
 }
 
 class ScoreCount {
@@ -242,9 +250,10 @@ function draw () {
 
   // draw
   fill(...color.fg)
-  rect(...padr.rect)
-  rect(...padl.rect)
-  ellipse(...ball.ellipse)
+
+  padr.draw()
+  padl.draw()
+  ball.draw()
 
   score.draw()
 
