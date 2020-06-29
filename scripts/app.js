@@ -2,6 +2,9 @@ const MARGIN = 10
 const FRAMERATE = 60
 const TEXTSIZE = 20
 
+const PAD_RIGHT = 'right'
+const PAD_LEFT = 'left'
+
 // screen
 const { innerWidth, innerHeight } = window
 
@@ -75,7 +78,7 @@ class PadLeft extends Pad {
   constructor(x = MARGIN, y = innerHeight / 2 - Pad.height / 2) {
     super(x, y)
   }
-  
+
   get keyMoveUp () { return KEY_W }
   get keyMoveDown () { return KEY_S }
 
@@ -86,7 +89,7 @@ class PadRight extends Pad {
   constructor(x = innerWidth - Pad.width - MARGIN, y = innerHeight / 2 - Pad.height / 2) {
     super(x, y)
   }
-  
+
   get keyMoveUp () { return KEY_UP }
   get keyMoveDown () { return KEY_DOWN }
 
@@ -176,7 +179,8 @@ class Ball {
       this.x = this.isGoingLeft ? limitLeft : limitRight
       this.xdir = this.xdir * -1
     } else {
-      this.reset()   
+      this.reset()
+      score.add(this.isGoingLeft ? PAD_RIGHT : PAD_LEFT)
     }
   }
 
@@ -188,11 +192,30 @@ class Ball {
   }
 }
 
+class ScoreCount {
+  constructor () {
+    this.score = {
+      [PAD_RIGHT]: 0,
+      [PAD_LEFT]: 0
+    }
+  }
+
+  add(side) {
+    this.score[side]++
+  }
+
+  draw () {
+    textAlign(CENTER, CENTER)
+    text(`${this.score[PAD_LEFT]} | ${this.score[PAD_RIGHT]}`, innerWidth/2, MARGIN * 2)
+  }
+}
+
 let canvas
 
 let padr = new PadRight()
 let padl = new PadLeft()
 let ball = new Ball()
+let score = new ScoreCount()
 
 let paused = false
 
@@ -206,29 +229,24 @@ function setup () {
 }
 
 function draw () {
-  console.clear()
-  console.log(
-    'frame', frameCount,
-    '\n' + 'ball', ball, 'l:', ball.isGoingLeft, 'u: ', ball.isGoingUp,
-    '\n' + 'padr', padr, 'face: ', padr.faceX,
-    '\n' + 'padl', padl, 'face: ', padl.faceX
-  )
-  
   // update
   if (!paused) {
     ball.update()
     padr.update()
-    padl.update()  
+    padl.update()
   }
+
   // reset screen
   clear()
   background(...color.bg)
-  
+
   // draw
   fill(...color.fg)
   rect(...padr.rect)
   rect(...padl.rect)
   ellipse(...ball.ellipse)
+
+  score.draw()
 
   if (paused) {
     textAlign(CENTER, CENTER)
