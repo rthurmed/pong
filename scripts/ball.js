@@ -1,9 +1,12 @@
 class Ball {
   static diameter = 42
-  static speed = 10
 
   static initialX = innerWidth/2 - Ball.diameter/2
   static initialY = innerHeight/2 - Ball.diameter/2
+
+  static increaser = (0.02 / 60) + 1
+
+  static initialSpeed = 10
 
   static randomDir = () => Math.round(Math.random()) || -1
 
@@ -41,6 +44,7 @@ class Ball {
     this.y = Ball.initialY
     this.xdir = Ball.randomDir()
     this.ydir = Ball.randomDir()
+    this.speed = Ball.initialSpeed
   }
 
   move (moveX, moveY) {
@@ -88,9 +92,10 @@ class Ball {
 
   update () {
     this.move(
-      this.xdir * Ball.speed,
-      this.ydir * Ball.speed
+      this.xdir * this.speed,
+      this.ydir * this.speed
     )
+    this.speed *= Ball.increaser
   }
 
   draw () {
